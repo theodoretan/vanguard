@@ -1,0 +1,1 @@
+public enum Windows{None,StartWindow,GameOverWindow,KeyboardWindow,DifficultyWindow,GameWindow,MessageWindow,BattleWindow,StatsWindow}
