@@ -8,6 +8,9 @@ public class StartWindow : GenericWindow {
 
 	public override void Open ()
 	{
+		// connect to socket
+		var _ = ConnectSocket.Instance;
+
 		var canContinue = true;
 
 		continueButton.gameObject.SetActive (canContinue);

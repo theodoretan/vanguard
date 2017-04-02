@@ -21,9 +21,17 @@ public class LoginWindow : GenericWindow {
 
     public void Login() {
         Debug.Log(this.password + " " + this.username);
-        if (this.username == defaultUsername && this.password == defaultPassword) {
-            OnNextWindow();
-        }
+
+		ConnectSocket.Instance.Login (this.username, this.password);
+
+//		ConnectSocket.socket.Login (this.username, this.password);
+//        if (this.username == defaultUsername && this.password == defaultPassword) {
+//            OnNextWindow();
+//        }
     }
+
+	public void NextWindow() {
+		OnNextWindow ();
+	}
 
 }
