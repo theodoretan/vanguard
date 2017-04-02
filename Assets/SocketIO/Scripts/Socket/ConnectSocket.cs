@@ -33,16 +33,6 @@ public class ConnectSocket {
 		}
 	}
 
-	// Use this for initialization
-//	void Start () {
-//		GameObject go = GameObject.Find ("SocketIO");
-//		socket = go.GetComponent<SocketIOComponent> ();
-//
-//		socket.On ("open", TestOpen);
-//		socket.On ("loggedIn", LoggedIn);
-//		socket.On ("error", Error);
-//	}
-
 
 	public void Login(string username, string password) {
 		Dictionary<string, string> data = new Dictionary<string, string> ();
