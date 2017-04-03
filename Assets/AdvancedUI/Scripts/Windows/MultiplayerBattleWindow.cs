@@ -26,6 +26,9 @@ public class MultiplayerBattleWindow : GenericWindow {
     }
 
     public void SetupBattle (JSONObject player, JSONObject opp){
+
+        Debug.Log(player);
+        Debug.Log(opp);
         Debug.Log("Setting up battle!");
 		this.Player1 = Int32.Parse(player ["id"].str) == 1 	? KnightTemplate.Clone<Actor>() : SlimeTemplate.Clone<Actor>();
 		this.Opp1 = Int32.Parse(opp ["id"].str) == 1 ? KnightTemplate.Clone<Actor>() : SlimeTemplate.Clone<Actor>();

@@ -140,10 +140,7 @@ public class ConnectSocket {
 	public void Pair() {
 		Debug.Log ("find game");
 
-		JSONObject data = new JSONObject ();
-		data.AddField ("user", new JSONObject(user));
-
-		socket.Emit("findGame", data);
+		socket.Emit("findGame", user);
 
 	}
 
@@ -214,6 +211,8 @@ public class ConnectSocket {
 
 		room = e.data ["room"].str;
 
+        Debug.Log(e.data);
+
 		opp = e.data["client1"] == user ? e.data["client2"] : e.data["client1"];
 
 		JSONObject data = new JSONObject();
@@ -226,14 +225,16 @@ public class ConnectSocket {
 
 	private void GotChars(SocketIOEvent e) {
 		Debug.Log ("chars");
+        Debug.Log(e.data);
 		oppCharacter = e.data["oppCharacter"];
 		userCharacter = e.data ["userCharacter"];
 
 		// get to game screen
 		// set sprites and shit
 
-		MultiplayerBattleWindow multiplybattlewindow = windowManager.Open ((int) Windows.MultiplayerBattleWindow - 1) as MultiplayerBattleWindow;
+		MultiplayerBattleWindow multiplybattlewindow = windowManager.Open ((int) Windows.MultiplayerBattleWindow - 1, false) as MultiplayerBattleWindow;
 		multiplybattlewindow.SetupBattle(userCharacter, oppCharacter);
+
 
 	}
 
