@@ -102,12 +102,15 @@ public class ConnectSocket {
 		socket.Emit ("getCharacter", new JSONObject (data));
 	}
 		
-//	public void SetCharacters() {
+//	public void SetCharacters(Actor c1, Actor c2, Actor c3) {
 //		Debug.Log ("set characters");
 //
 //		Dictionary<string, string> data = new Dictionary<string, string> ();
 //
-//
+//		data["username"] = user["username"];
+//		data["character1"] = c1.ToJSONString();
+//		data["character2"] = c2.ToJSONString();
+//		data["character3"] = c3.ToJSONString();
 //
 //		socket.Emit ("setCharacter", new JSONObject (data));
 //	}
