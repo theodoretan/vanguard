@@ -30,6 +30,10 @@ public class RegisterWindow : GenericWindow {
         //        }
     }
 
+    public void BackButton() {
+        OnPreviousWindow();
+    }
+
     public void NextWindow() {
         OnNextWindow();
     }

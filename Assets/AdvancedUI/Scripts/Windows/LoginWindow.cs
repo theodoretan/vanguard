@@ -27,6 +27,10 @@ public class LoginWindow : GenericWindow {
 //        }
     }
 
+    public void BackButton() {
+        OnPreviousWindow();
+    }
+
 	public void NextWindow() {
 		OnNextWindow ();
 	}
