@@ -8,7 +8,16 @@ public class Actor : ScriptableObject {
 	public int health;
 	public int maxHealth;
 	public int gold;
-	public Vector2 attackRange = Vector2.one;
+//	public Vector2 attackRange = Vector2.one;
+//
+//	public Vector2 spAttackRange = Vector2.one;
+
+	public int attack;
+	public int spAttack;
+	public int defence;
+	public int exp;
+	public int speed;
+	public float hitRate;
 
 	public bool alive {
 		get {
@@ -35,8 +44,34 @@ public class Actor : ScriptableObject {
 		clone.health = health;
 		clone.maxHealth = maxHealth;
 		clone.gold = gold;
-		clone.attackRange = attackRange;
+//		clone.attackRange = attackRange;
+//
+//		clone.spAttackRange = spAttackRange;
+
+
+		clone.attack = attack;
+		clone.spAttack = spAttack;
+		clone.defence = defence;
+		clone.exp = exp;
+		clone.speed = speed;
+		clone.hitRate = hitRate;
 		
 		return clone;
+	}
+
+	public string ToJSONString() {
+		Dictionary<string, string> data = new Dictionary<string, string> ();
+
+		data ["name"] = name;
+		data ["health"] = health.ToString();
+		data ["maxHealth"] = maxHealth.ToString();
+		data ["attack"] = attack.ToString ();
+		data ["spAttack"] = spAttack.ToString ();
+		data ["defence"] = defence.ToString ();
+		data ["exp"] = exp.ToString ();
+		data ["speed"] = speed.ToString ();
+		data ["hitRate"] = hitRate.ToString ();
+
+		return data.ToString ();
 	}
 }
