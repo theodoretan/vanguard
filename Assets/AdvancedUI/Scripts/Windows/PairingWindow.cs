@@ -6,6 +6,11 @@ public class PairingWindow : GenericWindow {
 
 	public override void Open(){
 		base.Open ();
+
+		var s = ConnectSocket.Instance;
+		s.Pair ();
 	}
+
+
 
 }
