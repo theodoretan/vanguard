@@ -11,29 +11,37 @@ public class RecordWindow : GenericWindow {
     public Text ScoreValue;
 
     public void UpdateValues() {
-        // get values from server;
+		var socket = ConnectSocket.Instance;
 
-        // WinsValue.text = ;
-        // LossesValue.text = "";
-        // StreakValue.text = "";
-        // ScoreValue.text = "";
+		socket.GetScore ();
     }
 
-    public void ClearText() {
-        WinsValue.text = "";
-        LossesValue.text = "";
-        StreakValue.text = "";
-        ScoreValue.text = "";
-    }
+//    public void ClearText() {
+//        WinsValue.text = "";
+//        LossesValue.text = "";
+//        StreakValue.text = "";
+//        ScoreValue.text = "";
+//    }
 
     public override void Open() {
-        ClearText();
-        UpdateValues();
-        base.Open();
+		base.Open();
+//        ClearText();
+//		UpdateValues ();
     }
+
+	public void Start() {
+		UpdateValues ();
+	}
 
     public void BackButton() {
         OnPreviousWindow();
     }
+
+	public void SetValues(string wins, string losses, string streak, string score) {
+		 WinsValue.text = wins;
+		 LossesValue.text = losses;
+		 StreakValue.text = streak;
+		 ScoreValue.text = score;
+	}
 
 }

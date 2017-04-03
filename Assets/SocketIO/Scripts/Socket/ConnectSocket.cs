@@ -139,8 +139,8 @@ public class ConnectSocket {
 	private void ShowScore(SocketIOEvent e) {
 		Debug.Log("[ShowScore] returned: " + e.data);
 
-		// RecordWindow recordWindow = windowManager.Open((int) Windows.RecordWindow - 1, false) as RecordWindow;
-		// recordWindow.NextWindow();
+		RecordWindow recordWindow = windowManager.Open((int) Windows.RecordWindow - 1, false) as RecordWindow;
+		recordWindow.SetValues(e.data["wins"].ToString(), e.data["losses"].ToString(), e.data["streak"].ToString(), e.data["score"].ToString());
 	}
 
 	private void ShowMenu(SocketIOEvent e) {
