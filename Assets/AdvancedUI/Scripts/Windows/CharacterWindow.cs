@@ -14,8 +14,13 @@ public class CharacterWindow : GenericWindow {
     public Image CharacterImage2;
     public Image CharacterImage3;
 
+	public Text ButtonText;
+	public Button SubmitButton;
+
     public Sprite slime;
     public Sprite knight;
+
+	private bool updated = false;
 
 	[Space]
 	[Header("Actor Templates")]
@@ -38,6 +43,15 @@ public class CharacterWindow : GenericWindow {
 
 		connect.GetCharacters ();
     }
+
+	public override void Open(){
+		if (updated) {
+			ButtonText.text = "Update";
+			SubmitButton.onClick.RemoveAllListeners ();
+			SubmitButton.onClick.AddListener (UpdateCharacters);
+		}
+		base.Open ();
+	}
 
     public void SwitchImage2() {
         if (sprite2 == 0) {
@@ -73,6 +87,7 @@ public class CharacterWindow : GenericWindow {
 
 		var connect = ConnectSocket.Instance;
 
+		updated = true;
 		connect.SetCharacters (a1,a2,a3);
 		// Change 0 into PlayerActor
         // Change 1 into SlimeActor
@@ -80,10 +95,30 @@ public class CharacterWindow : GenericWindow {
 //        OnNextWindow();
     }
 
+	public void UpdateCharacters(){
+		// Update Thingy
+		Actor a1 = sprite1 == 1 ? playerTemplate.Clone<Actor> () : monsterTemplate.Clone<Actor>();
+		Actor a2 = sprite2 == 1 ? playerTemplate.Clone<Actor> () : monsterTemplate.Clone<Actor>();
+		Actor a3 = sprite3 == 1 ? playerTemplate.Clone<Actor> () : monsterTemplate.Clone<Actor>();
+
+		a1.ResetHealth ();
+		a2.ResetHealth ();
+		a3.ResetHealth ();
+
+		var connect = ConnectSocket.Instance;
+
+		connect.UpdateCharacters (a1,a2,a3);
+	}
+
 	public void SetCharacters(JSONObject a1, JSONObject a2, JSONObject a3) {
 		sprite1 = Int32.Parse(a1["id"].str);
 		sprite2 = Int32.Parse(a2["id"].str);
 		sprite3 = Int32.Parse(a3["id"].str);
+
+		updated = true;
+		ButtonText.text = "Update";
+		SubmitButton.onClick.RemoveAllListeners ();
+		SubmitButton.onClick.AddListener (UpdateCharacters);
 
 		CharacterImage1.sprite = sprite1 == 1 ? knight : slime;
 		CharacterImage2.sprite = sprite2 == 1 ? knight : slime;

@@ -32,6 +32,7 @@ public class ConnectSocket {
 		socket.On ("noCharacter", NoCharacter);
 		socket.On ("gotCharacter", ShowCharacters);
 		socket.On ("setCharacter", ShowMenu);
+		socket.On ("updatedCharacter", ShowMenu);
 
 		// socket.On("inqueue", Queued);
 		// socket.On("paired", Paired);
@@ -117,6 +118,19 @@ public class ConnectSocket {
 		socket.Emit ("setCharacter", data);
 	}
 
+	public void UpdateCharacters(Actor c1, Actor c2, Actor c3) {
+		Debug.Log ("update characters");
+
+		JSONObject data = new JSONObject ();
+		data.AddField ("username", user ["username"]);
+		data.AddField ("character1", c1.ToJSON());
+		data.AddField ("character2", c2.ToJSON());
+		data.AddField ("character3", c3.ToJSON());
+
+		Debug.Log (data);
+
+		socket.Emit ("updateCharacter", data);
+	}
 
 	// Returned stuff
 	private void TestOpen(SocketIOEvent e) {
