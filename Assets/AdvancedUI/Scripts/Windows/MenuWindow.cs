@@ -6,7 +6,7 @@ public class MenuWindow : GenericWindow {
 
     public void StartGame() {
         Debug.Log("Clicked Start Game");
-		manager.Open((int) Windows.GameWindow - 1);
+		manager.Open((int) Windows.PairingWindow - 1);
     }
 
     public void SetCharacters() {
@@ -18,8 +18,4 @@ public class MenuWindow : GenericWindow {
         Debug.Log("Clicked View Game");
 		manager.Open((int) Windows.RecordWindow - 1);
     }
-
-	public void PreviousWindow() {
-		OnPreviousWindow ();
-	}
 }

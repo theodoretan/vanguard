@@ -8,7 +8,11 @@ public class ConnectSocket {
 	
 	private static ConnectSocket instance;
 	private SocketIOComponent socket;
-	private Dictionary<string, string> user = new Dictionary<string, string> ();
+	private JSONObject user = new JSONObject();
+	private JSONObject opp = new JSONObject();
+	private JSONObject userCharacter = new JSONObject();
+	private JSONObject oppCharacter = new JSONObject();
+	private string room;
 
 	private WindowManager windowManager {
 		get {
@@ -33,9 +37,10 @@ public class ConnectSocket {
 		socket.On ("gotCharacter", ShowCharacters);
 		socket.On ("setCharacter", ShowMenu);
 		socket.On ("updatedCharacter", ShowMenu);
+		socket.On ("gotCharacters", GotChars);
 
-		// socket.On("inqueue", Queued);
-		// socket.On("paired", Paired);
+		 socket.On("inqueue", Queued);
+		 socket.On("paired", Paired);
 
 
 		socket.On ("error", Error);
@@ -77,7 +82,7 @@ public class ConnectSocket {
 
 		Dictionary<string, string> data = new Dictionary<string, string> ();
 
-		data ["id"] = user["_id"];
+		data ["id"] = user["_id"].str;
 
 		socket.Emit ("getScore", new JSONObject (data));
 	}
@@ -87,7 +92,7 @@ public class ConnectSocket {
 
 		Dictionary<string, string> data = new Dictionary<string, string> ();
 
-		data ["id"] = user ["_id"];
+		data ["id"] = user ["_id"].str;
 		data ["wins"] = win.ToString ();
 		data ["losses"] = loss.ToString ();
 
@@ -99,7 +104,7 @@ public class ConnectSocket {
 
 		Dictionary<string, string> data = new Dictionary<string, string> ();
 
-		data ["username"] = user ["username"];
+		data ["username"] = user ["username"].str;
 
 		socket.Emit ("getCharacter", new JSONObject (data));
 	}
@@ -108,7 +113,7 @@ public class ConnectSocket {
 		Debug.Log ("set characters");
 
 		JSONObject data = new JSONObject ();
-		data.AddField ("username", user ["username"]);
+		data.AddField ("username", user ["username"].str);
 		data.AddField ("character1", c1.ToJSON());
 		data.AddField ("character2", c2.ToJSON());
 		data.AddField ("character3", c3.ToJSON());
@@ -122,7 +127,7 @@ public class ConnectSocket {
 		Debug.Log ("update characters");
 
 		JSONObject data = new JSONObject ();
-		data.AddField ("username", user ["username"]);
+		data.AddField ("username", user ["username"].str);
 		data.AddField ("character1", c1.ToJSON());
 		data.AddField ("character2", c2.ToJSON());
 		data.AddField ("character3", c3.ToJSON());
@@ -130,6 +135,16 @@ public class ConnectSocket {
 		Debug.Log (data);
 
 		socket.Emit ("updateCharacter", data);
+	}
+
+	public void Pair() {
+		Debug.Log ("find game");
+
+		JSONObject data = new JSONObject ();
+		data.AddField ("user", new JSONObject(user));
+
+		socket.Emit("findGame", data);
+
 	}
 
 	// Returned stuff
@@ -140,7 +155,7 @@ public class ConnectSocket {
 	private void LoggedIn(SocketIOEvent e) {
 		Debug.Log ("[LoggedIn] returned: " + e.data);
 
-		user = e.data.ToDictionary();
+		user = e.data;
 
 		LoginWindow loginWindow = windowManager.Open((int) Windows.LoginWindow - 1, false) as LoginWindow;
 		loginWindow.NextWindow();
@@ -149,7 +164,7 @@ public class ConnectSocket {
 	private void Registered(SocketIOEvent e) {
 		Debug.Log ("[Registered] returned: " + e.data);
 
-		user = e.data.ToDictionary();
+		user = e.data;
 
 		RegisterWindow registerWindow = windowManager.Open((int) Windows.RegisterWindow - 1, false) as RegisterWindow;
 		registerWindow.NextWindow();
@@ -183,8 +198,44 @@ public class ConnectSocket {
 	private void ShowCharacters(SocketIOEvent e) {
 		Debug.Log ("[ShowCharacters] returned: " + e.data);
 
+		userCharacter = e.data;
+
 		CharacterWindow characterWindow = windowManager.Open((int) Windows.CharacterWindow -1, false) as CharacterWindow;
 		characterWindow.SetCharacters(e.data["character1"], e.data["character2"], e.data["character3"]);
+	}
+
+
+	private void Queued(SocketIOEvent e) {
+		Debug.Log ("queueeueueueueueueued");
+	}
+
+	private void Paired(SocketIOEvent e) {
+		Debug.Log ("paired boi");
+
+		room = e.data ["room"].str;
+
+		opp = e.data["client1"]["gameUser"] == user ? e.data["client2"]["gameUser"] : e.data["client1"]["gameUser"];
+
+		JSONObject data = new JSONObject();
+
+		data.AddField ("opp", opp);
+		data.AddField ("user", user);
+
+		socket.Emit ("getCharacters", data);
+	}
+
+	private void GotChars(SocketIOEvent e) {
+		Debug.Log ("chars");
+		oppCharacter = e.data["oppCharacter"];
+		userCharacter = e.data ["userCharacter"];
+
+		// get to game screen
+		// set sprites and shit
+
+		MultiplayerBattleWindow multiplybattlewindow = windowManager.Open ((int) Windows.MultiplayerBattleWindow - 1, false) as MultiplayerBattleWindow;
+		multiplybattlewindow.SetupBattle(userCharacter, oppCharacter);
+		multiplybattlewindow.Open ();
+
 	}
 
 	// Errors
