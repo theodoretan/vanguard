@@ -177,8 +177,7 @@ public class ConnectSocket {
 	private void ShowMenu(SocketIOEvent e) {
 		Debug.Log("[ShowMenu] returned: " + e.data);
 
-		LoginWindow loginWindow = windowManager.Open((int) Windows.LoginWindow - 1, false) as LoginWindow;
-		loginWindow.NextWindow();
+		MenuWindow MenuWindow = windowManager.Open((int) Windows.MenuWindow - 1) as MenuWindow;
 	}
 
 	private void UpdatedScore(SocketIOEvent e) {
