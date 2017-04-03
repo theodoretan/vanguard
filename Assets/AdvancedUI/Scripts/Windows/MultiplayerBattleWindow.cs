@@ -27,17 +27,23 @@ public class MultiplayerBattleWindow : GenericWindow {
 
     public void SetupBattle (JSONObject player, JSONObject opp){
 
-        Debug.Log(player);
-        Debug.Log(opp);
+//        Debug.Log(player);
+//        Debug.Log(opp);
         Debug.Log("Setting up battle!");
 		this.Player1 = Int32.Parse(player ["character1"]["id"].str) == 1 	? KnightTemplate.Clone<Actor>() : SlimeTemplate.Clone<Actor>();
 		this.Opp1 = Int32.Parse(opp ["character1"]["id"].str) == 1 ? KnightTemplate.Clone<Actor>() : SlimeTemplate.Clone<Actor>();
+
+		this.Player1.ResetHealth ();
+		this.Opp1.ResetHealth ();
 
 		this.OpponentHP.text = Opp1.health+"/"+Opp1.maxHealth;
 		this.PlayerHP.text = Player1.health + "/" + Player1.maxHealth;
 
 		this.PlayerImage.sprite = Int32.Parse (player ["character1"]["id"].str) == 1 ? KnightImageTemplate : SlimeImageTemplate;
 		this.OppImage.sprite = Int32.Parse (opp ["character1"]["id"].str) == 1 ? KnightImageTemplate : SlimeImageTemplate;
+
+		this.PlayerImage.SetNativeSize ();
+		this.OppImage.SetNativeSize ();
 	}
 
 

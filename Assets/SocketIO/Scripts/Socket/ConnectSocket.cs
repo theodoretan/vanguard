@@ -211,9 +211,11 @@ public class ConnectSocket {
 
 		room = e.data ["room"].str;
 
-        Debug.Log(e.data);
+//        Debug.Log(e.data);
 
-		opp = e.data["client1"] == user ? e.data["client2"] : e.data["client1"];
+		opp = e.data["client1"]["_id"].str.Equals(user["_id"].str) ? e.data["client2"] : e.data["client1"];
+
+		Debug.Log (opp);
 
 		JSONObject data = new JSONObject();
 
