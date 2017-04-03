@@ -29,8 +29,9 @@ public class ConnectSocket {
 		socket.On ("gotScore", ShowScore);
 		socket.On ("scoreUpdated", UpdatedScore);
 
+		socket.On ("noCharacter", NoCharacter);
 		socket.On ("gotCharacter", ShowCharacters);
-//		socket.On ("setCharacter", ShowCharacters);
+		socket.On ("setCharacter", ShowMenu);
 
 		// socket.On("inqueue", Queued);
 		// socket.On("paired", Paired);
@@ -102,18 +103,19 @@ public class ConnectSocket {
 		socket.Emit ("getCharacter", new JSONObject (data));
 	}
 		
-//	public void SetCharacters(Actor c1, Actor c2, Actor c3) {
-//		Debug.Log ("set characters");
-//
-//		Dictionary<string, string> data = new Dictionary<string, string> ();
-//
-//		data["username"] = user["username"];
-//		data["character1"] = c1.ToJSONString();
-//		data["character2"] = c2.ToJSONString();
-//		data["character3"] = c3.ToJSONString();
-//
-//		socket.Emit ("setCharacter", new JSONObject (data));
-//	}
+	public void SetCharacters(Actor c1, Actor c2, Actor c3) {
+		Debug.Log ("set characters");
+
+		JSONObject data = new JSONObject ();
+		data.AddField ("username", user ["username"]);
+		data.AddField ("character1", c1.ToJSON());
+		data.AddField ("character2", c2.ToJSON());
+		data.AddField ("character3", c3.ToJSON());
+
+		Debug.Log (data);
+
+		socket.Emit ("setCharacter", data);
+	}
 
 
 	// Returned stuff
@@ -149,8 +151,8 @@ public class ConnectSocket {
 	private void ShowMenu(SocketIOEvent e) {
 		Debug.Log("[ShowMenu] returned: " + e.data);
 
-		// MenuWindow menuWindow = windowManager.Open((int) Windows.MenuWindow - 1, false) as MenuWindow;
-		// menuWindow.Open();
+		LoginWindow loginWindow = windowManager.Open((int) Windows.LoginWindow - 1, false) as LoginWindow;
+		loginWindow.NextWindow();
 	}
 
 	private void UpdatedScore(SocketIOEvent e) {
@@ -159,11 +161,16 @@ public class ConnectSocket {
 
 	}
 
+
+	private void NoCharacter(SocketIOEvent e) {
+		Debug.Log ("[NoCharacter] returned");
+	}
+
 	private void ShowCharacters(SocketIOEvent e) {
 		Debug.Log ("[ShowCharacters] returned: " + e.data);
 
-		// CharactersWindow charactersWindow = windowManager.Open((int) Windows.CharactersWindow -1, false) as CharactersWindow;
-		// charactersWindow.Open();
+		CharacterWindow characterWindow = windowManager.Open((int) Windows.CharacterWindow -1, false) as CharacterWindow;
+		characterWindow.SetCharacters(e.data["character1"], e.data["character2"], e.data["character3"]);
 	}
 
 	// Errors

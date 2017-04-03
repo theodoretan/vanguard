@@ -19,4 +19,7 @@ public class MenuWindow : GenericWindow {
 		manager.Open((int) Windows.RecordWindow - 1);
     }
 
+	public void PreviousWindow() {
+		OnPreviousWindow ();
+	}
 }

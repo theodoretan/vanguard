@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Actor : ScriptableObject {
 
+	public int id;
 	public new string name;
 	public int health;
 	public int maxHealth;
@@ -40,6 +41,7 @@ public class Actor : ScriptableObject {
 	public T Clone<T>() where T : Actor {
 		var clone = ScriptableObject.CreateInstance<T>();
 
+		clone.id = id;
 		clone.name = name;
 		clone.health = health;
 		clone.maxHealth = maxHealth;
@@ -59,9 +61,10 @@ public class Actor : ScriptableObject {
 		return clone;
 	}
 
-	public string ToJSONString() {
+	public JSONObject ToJSON() {
 		Dictionary<string, string> data = new Dictionary<string, string> ();
 
+		data ["id"] = id.ToString();
 		data ["name"] = name;
 		data ["health"] = health.ToString();
 		data ["maxHealth"] = maxHealth.ToString();
@@ -72,6 +75,6 @@ public class Actor : ScriptableObject {
 		data ["speed"] = speed.ToString ();
 		data ["hitRate"] = hitRate.ToString ();
 
-		return data.ToString ();
+		return new JSONObject(data);
 	}
 }

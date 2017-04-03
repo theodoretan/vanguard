@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -16,6 +17,11 @@ public class CharacterWindow : GenericWindow {
     public Sprite slime;
     public Sprite knight;
 
+	[Space]
+	[Header("Actor Templates")]
+	public Actor playerTemplate;
+	public Actor monsterTemplate;
+
     public void SwitchImage1(){
         if (sprite1 == 0) {
             CharacterImage1.sprite = knight;
@@ -28,9 +34,9 @@ public class CharacterWindow : GenericWindow {
     }
 
     public void Start() {
-        // Get From Database;
-        // use name is determine int id
-        // set spriteid
+		var connect = ConnectSocket.Instance;
+
+		connect.GetCharacters ();
     }
 
     public void SwitchImage2() {
@@ -56,14 +62,44 @@ public class CharacterWindow : GenericWindow {
     }
 
     public void SubmitCharacters() {
-        // Change 0 into PlayerActor
+
+		Actor a1 = sprite1 == 1 ? playerTemplate.Clone<Actor> () : monsterTemplate.Clone<Actor>();
+		Actor a2 = sprite2 == 1 ? playerTemplate.Clone<Actor> () : monsterTemplate.Clone<Actor>();
+		Actor a3 = sprite3 == 1 ? playerTemplate.Clone<Actor> () : monsterTemplate.Clone<Actor>();
+        
+		a1.ResetHealth ();
+		a2.ResetHealth ();
+		a3.ResetHealth ();
+
+		var connect = ConnectSocket.Instance;
+
+		connect.SetCharacters (a1,a2,a3);
+		// Change 0 into PlayerActor
         // Change 1 into SlimeActor
         // Submit to Database
-        OnNextWindow();
+//        OnNextWindow();
     }
+
+	public void SetCharacters(JSONObject a1, JSONObject a2, JSONObject a3) {
+		sprite1 = Int32.Parse(a1["id"].str);
+		sprite2 = Int32.Parse(a2["id"].str);
+		sprite3 = Int32.Parse(a3["id"].str);
+
+		CharacterImage1.sprite = sprite1 == 1 ? knight : slime;
+		CharacterImage2.sprite = sprite2 == 1 ? knight : slime;
+		CharacterImage3.sprite = sprite3 == 1 ? knight : slime;
+
+		CharacterImage1.SetNativeSize ();
+		CharacterImage2.SetNativeSize ();
+		CharacterImage3.SetNativeSize ();
+	}
 
     public void BackButton() {
         OnPreviousWindow();
     }
+
+	public void NextWindow() {
+		OnNextWindow ();
+	}
 
 }
