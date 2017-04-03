@@ -7,14 +7,15 @@ public class AttackBattleAction : GenericBattleAction {
 
 	public override void Action (Actor target1, Actor target2) {
 		// base.Action(target1, target2);
-		var attackValue = (int) Random.Range(target1.attackRange.x, target1.attackRange.y);
+//		var attackValue = (int) Random.Range(target1.attackRange.x, target1.attackRange.y);
+		var attackValue = target1.attack;
 		target2.DecreaseHealth(attackValue);
 
 		var sb = new StringBuilder();
 
-		if (attackValue >= target1.attackRange.y - 1) {
-			sb.Append("Critical hit! ");
-		}
+//		if (attackValue >= target1.attackRange.y - 1) {
+//			sb.Append("Critical hit! ");
+//		}
 
 		sb.Append(target1.name);
 		sb.Append(" atacks ");
