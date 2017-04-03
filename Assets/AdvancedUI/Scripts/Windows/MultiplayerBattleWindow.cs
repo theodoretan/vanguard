@@ -21,14 +21,12 @@ public class MultiplayerBattleWindow : GenericWindow {
 	private Actor Player1;
 	private Actor Opp1;
 
-	public override void Open(){
+    public override void Open() {
+        base.Open();
+    }
 
-
-
-		base.Open ();
-	}
-
-	public void SetupBattle (JSONObject player, JSONObject opp){
+    public void SetupBattle (JSONObject player, JSONObject opp){
+        Debug.Log("Setting up battle!");
 		this.Player1 = Int32.Parse(player ["id"].str) == 1 	? KnightTemplate.Clone<Actor>() : SlimeTemplate.Clone<Actor>();
 		this.Opp1 = Int32.Parse(opp ["id"].str) == 1 ? KnightTemplate.Clone<Actor>() : SlimeTemplate.Clone<Actor>();
 

@@ -232,9 +232,8 @@ public class ConnectSocket {
 		// get to game screen
 		// set sprites and shit
 
-		MultiplayerBattleWindow multiplybattlewindow = windowManager.Open ((int) Windows.MultiplayerBattleWindow - 1, false) as MultiplayerBattleWindow;
+		MultiplayerBattleWindow multiplybattlewindow = windowManager.Open ((int) Windows.MultiplayerBattleWindow - 1) as MultiplayerBattleWindow;
 		multiplybattlewindow.SetupBattle(userCharacter, oppCharacter);
-		multiplybattlewindow.Open ();
 
 	}
 
