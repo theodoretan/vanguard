@@ -8,9 +8,6 @@ public class LoginWindow : GenericWindow {
     private string username;
     private string password;
 
-    private string defaultUsername = "admin";
-    private string defaultPassword = "pass";
-
     public void getUsername(string username) {
         this.username = username;
     }

@@ -29,6 +29,7 @@ public class StartWindow : GenericWindow {
 
 	public void Continue(){
 		Debug.Log ("Continue Pressed");
+        manager.Open((int) Windows.RegisterWindow -1);
 	}
 
 	public void Options(){
