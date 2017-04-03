@@ -17,6 +17,7 @@ public class Actor : ScriptableObject {
 	public int defence;
 	public int exp;
 	public int speed;
+	public float hitRate;
 
 	public bool alive {
 		get {
@@ -53,6 +54,7 @@ public class Actor : ScriptableObject {
 		clone.defence = defence;
 		clone.exp = exp;
 		clone.speed = speed;
+		clone.hitRate = hitRate;
 		
 		return clone;
 	}
@@ -68,6 +70,7 @@ public class Actor : ScriptableObject {
 		data ["defence"] = defence.ToString ();
 		data ["exp"] = exp.ToString ();
 		data ["speed"] = speed.ToString ();
+		data ["hitRate"] = hitRate.ToString ();
 
 		return data.ToString ();
 	}
