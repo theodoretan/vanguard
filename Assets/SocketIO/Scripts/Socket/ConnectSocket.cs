@@ -214,7 +214,7 @@ public class ConnectSocket {
 
 		room = e.data ["room"].str;
 
-		opp = e.data["client1"]["gameUser"] == user ? e.data["client2"]["gameUser"] : e.data["client1"]["gameUser"];
+		opp = e.data["client1"] == user ? e.data["client2"] : e.data["client1"];
 
 		JSONObject data = new JSONObject();
 
