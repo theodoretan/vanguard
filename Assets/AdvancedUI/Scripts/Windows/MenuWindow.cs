@@ -11,7 +11,7 @@ public class MenuWindow : GenericWindow {
 
     public void SetCharacters() {
         Debug.Log("Clicked Set Character");
-        manager.Open(0);
+        manager.Open((int)Windows.CharacterWindow - 1);
     }
 
     public void ViewRecord() {
