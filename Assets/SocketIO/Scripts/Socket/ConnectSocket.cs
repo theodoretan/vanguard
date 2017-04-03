@@ -30,6 +30,7 @@ public class ConnectSocket {
 		socket.On ("scoreUpdated", UpdatedScore);
 
 		socket.On ("gotCharacter", ShowCharacters);
+//		socket.On ("setCharacter", ShowCharacters);
 
 		// socket.On("inqueue", Queued);
 		// socket.On("paired", Paired);
