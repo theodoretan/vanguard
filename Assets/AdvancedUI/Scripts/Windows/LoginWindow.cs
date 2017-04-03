@@ -19,7 +19,7 @@ public class LoginWindow : GenericWindow {
     public void Login() {
         Debug.Log(this.password + " " + this.username);
 
-		ConnectSocket.Instance.Login (this.username, this.password);
+		ConnectSocket.Instance.Login (this.username.ToLower(), this.password);
 
 //		ConnectSocket.socket.Login (this.username, this.password);
 //        if (this.username == defaultUsername && this.password == defaultPassword) {

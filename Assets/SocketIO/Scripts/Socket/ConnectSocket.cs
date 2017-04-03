@@ -132,8 +132,8 @@ public class ConnectSocket {
 
 		user = e.data.ToDictionary();
 
-		// RegisterWindow registerWindow = windowManager.Open((int) Windows.RegisterWindow - 1, false) as RegisterWindow;
-		// registerWindow.NextWindow();
+		RegisterWindow registerWindow = windowManager.Open((int) Windows.RegisterWindow - 1, false) as RegisterWindow;
+		registerWindow.NextWindow();
 	}
 
 	private void ShowScore(SocketIOEvent e) {

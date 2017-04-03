@@ -19,8 +19,11 @@ public class RegisterWindow : GenericWindow {
     public void Register() {
         Debug.Log("Registering: "+this.username+" - "+this.password);
 
-        
-
+		if (!this.username.Equals ("") && !this.password.Equals ("")) {
+			ConnectSocket.Instance.Register (this.username.ToLower(), this.password);
+		} else {
+			// error window
+		}
         //		ConnectSocket.socket.Login (this.username, this.password);
         //        if (this.username == defaultUsername && this.password == defaultPassword) {
         //            OnNextWindow();
