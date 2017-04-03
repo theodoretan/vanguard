@@ -6,7 +6,7 @@ public class MenuWindow : GenericWindow {
 
     public void StartGame() {
         Debug.Log("Clicked Start Game");
-        manager.Open(4);
+		manager.Open((int) Windows.GameWindow - 1);
     }
 
     public void SetCharacters() {
@@ -16,7 +16,7 @@ public class MenuWindow : GenericWindow {
 
     public void ViewRecord() {
         Debug.Log("Clicked View Game");
-        manager.Open(0);
+		manager.Open((int) Windows.RecordWindow - 1);
     }
 
 }
