@@ -144,6 +144,11 @@ public class ConnectSocket {
 
 	}
 
+	public void Disconnect(){
+		// Disconnect Function
+		socket.Emit("disconnect");
+	}
+
 	// Returned stuff
 	private void TestOpen(SocketIOEvent e) {
 		Debug.Log ("Opened!!");

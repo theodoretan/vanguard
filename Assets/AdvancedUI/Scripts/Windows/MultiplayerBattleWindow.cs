@@ -65,6 +65,10 @@ public class MultiplayerBattleWindow : GenericWindow {
 	public void Run(){
 		// Disconnect and go back to menu
 		Debug.Log("Surrendering Pressed");
+		var socket = ConnectSocket.Instance;
+
+		socket.Disconnect ();
+		manager.Open ((int) Windows.MenuWindow - 1);
 	}
 
 }
