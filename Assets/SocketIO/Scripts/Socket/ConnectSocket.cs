@@ -166,7 +166,7 @@ public class ConnectSocket {
     public void UpdateScore(bool won) {
         JSONObject data = new JSONObject();
 
-        data.AddField("id", user["id"].str);
+        data.AddField("id", user["_id"].str);
         data.AddField("wins", (won ? 1 : 0));
         data.AddField("losses", (won ? 0 : 1));
 
