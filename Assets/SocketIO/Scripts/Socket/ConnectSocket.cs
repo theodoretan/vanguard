@@ -42,6 +42,8 @@ public class ConnectSocket {
 		 socket.On("inqueue", Queued);
 		 socket.On("paired", Paired);
 
+        socket.On("results", AttackResult);
+        socket.On("waiting", WaitingForOpponent);
 
 		socket.On ("error", Error);
 		socket.On ("errorUsernameTaken", UsernameTaken);
@@ -250,6 +252,16 @@ public class ConnectSocket {
 		multiplybattlewindow.SetupBattle(userCharacter, oppCharacter);
 
 	}
+
+    private void AttackResult(SocketIOEvent e) {
+
+        Debug.Log("Battle Results: "+e.data);
+
+    }
+
+    private void WaitingForOpponent(SocketIOEvent e) {
+        Debug.Log(e.data["message"]);
+    }
 
 	// Errors
 	private void Error(SocketIOEvent e) {
