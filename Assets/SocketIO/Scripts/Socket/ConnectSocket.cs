@@ -149,6 +149,14 @@ public class ConnectSocket {
 		socket.Emit("disconnect");
 	}
 
+    public void monsterInformation(Actor a1) {
+
+        Debug.Log(a1.ToJSON());
+
+        socket.Emit("onCommand", a1.ToJSON());
+    }
+
+
 	// Returned stuff
 	private void TestOpen(SocketIOEvent e) {
 		Debug.Log ("Opened!!");
@@ -240,7 +248,6 @@ public class ConnectSocket {
 
 		MultiplayerBattleWindow multiplybattlewindow = windowManager.Open ((int) Windows.MultiplayerBattleWindow - 1, false) as MultiplayerBattleWindow;
 		multiplybattlewindow.SetupBattle(userCharacter, oppCharacter);
-
 
 	}
 

@@ -50,6 +50,11 @@ public class MultiplayerBattleWindow : GenericWindow {
 	public void Attack(){
 		// Attack
 		Debug.Log("Attack Pressed");
+
+        var socket = ConnectSocket.Instance;
+
+        socket.monsterInformation(Player1);
+
 	}
 
 	public void SpecialAttack(){
