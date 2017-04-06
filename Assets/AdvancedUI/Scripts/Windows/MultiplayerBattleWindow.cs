@@ -7,6 +7,8 @@ using UnityEngine.UI;
 public class MultiplayerBattleWindow : GenericWindow {
 
     public GameObject actionsGroup;
+    public bool yourturn;
+    public bool finishedRound = false;
 
 	public Text OpponentHP;
 	public Text PlayerHP;
@@ -32,40 +34,15 @@ public class MultiplayerBattleWindow : GenericWindow {
         if (data["first"].str == "you") {
             // we first
             Opp1.DecreaseHealth(Player1.attack);
-            StartCoroutine(UpdateStats());
-            this.OpponentHP.text = Opp1.health + "/" + Opp1.maxHealth;
-            if (!Opp1.alive) {
-                // they dead and game over
-                StartCoroutine(OnBattleOver());
-            }
-
-            Player1.DecreaseHealth(Opp1.attack);
-            StartCoroutine(UpdateStats());
-            this.PlayerHP.text = Player1.health + "/" + Player1.maxHealth;
-            if (!Player1.alive) {
-                // we dead, gameover
-                StartCoroutine(OnBattleOver());
-            }
+            yourturn = false;
         } else {
-            // we second
             Player1.DecreaseHealth(Opp1.attack);
-            StartCoroutine(UpdateStats());
-            this.PlayerHP.text = Player1.health + "/" + Player1.maxHealth;
-            if (!Player1.alive) {
-                // we dead, gameover
-                StartCoroutine(OnBattleOver());
-            }
-
-            Opp1.DecreaseHealth(Player1.attack);
-            StartCoroutine(UpdateStats());
-            this.OpponentHP.text = Opp1.health + "/" + Opp1.maxHealth;
-            if (!Opp1.alive) {
-                // they dead and game over
-                StartCoroutine(OnBattleOver());
-            }
+            yourturn = true;
         }
-        // enable attack/run key
-        actionsGroup.SetActive(true);
+
+        StartCoroutine(UpdateStats());
+
+       
     }
 
     public void SetupBattle (JSONObject player, JSONObject opp){
@@ -93,6 +70,8 @@ public class MultiplayerBattleWindow : GenericWindow {
 	public void Attack(){
 		// Attack
 		Debug.Log("Attack Pressed");
+
+        finishedRound = false;
 
         // disable attack/run key
         actionsGroup.SetActive(false);
@@ -122,8 +101,34 @@ public class MultiplayerBattleWindow : GenericWindow {
 		manager.Open ((int) Windows.MenuWindow - 1);
 	}
 
+    public void NextAction() {
+        if (yourturn) {
+            Opp1.DecreaseHealth(Player1.attack);
+        } else {
+            Player1.DecreaseHealth(Opp1.attack);
+        }
+        finishedRound = true;
+        StartCoroutine(UpdateStats());
+    }
+
     IEnumerator UpdateStats() {
         yield return new WaitForSeconds(0.5f);
+        this.OpponentHP.text = Opp1.health + "/" + Opp1.maxHealth;
+        this.PlayerHP.text = Player1.health + "/" + Player1.maxHealth;
+
+        yield return new WaitForSeconds(1);
+
+        if (!Player1.alive || !Opp1.alive) {
+            // they dead and game over
+            StartCoroutine(OnBattleOver());
+        } else {
+            if (finishedRound) {
+                // go do actions
+                actionsGroup.SetActive(true);
+            } else {
+                NextAction();
+            }
+        }
     }
 
     IEnumerator OnBattleOver() {
