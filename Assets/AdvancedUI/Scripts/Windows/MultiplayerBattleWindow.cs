@@ -25,6 +25,16 @@ public class MultiplayerBattleWindow : GenericWindow {
 	private Actor Player1;
 	private Actor Opp1;
 
+    public RectTransform playerRect;
+    public RectTransform monsterRect;
+
+    private ShakeManager shakeManager;
+
+    protected override void Awake() {
+        shakeManager = GetComponent<ShakeManager>();
+        base.Awake();
+    }
+
     public override void Open() {
         base.Open();
     }
@@ -34,15 +44,15 @@ public class MultiplayerBattleWindow : GenericWindow {
         if (data["first"].str == "you") {
             // we first
             Opp1.DecreaseHealth(Player1.attack);
+            shakeManager.Shake(monsterRect, 1f, 2);
             yourturn = false;
         } else {
             Player1.DecreaseHealth(Opp1.attack);
+            shakeManager.Shake(playerRect, 1f, 2);
             yourturn = true;
         }
 
         StartCoroutine(UpdateStats());
-
-       
     }
 
     public void SetupBattle (JSONObject player, JSONObject opp){
@@ -104,8 +114,12 @@ public class MultiplayerBattleWindow : GenericWindow {
     public void NextAction() {
         if (yourturn) {
             Opp1.DecreaseHealth(Player1.attack);
+            shakeManager.Shake(monsterRect, 1f, 2);
+
         } else {
             Player1.DecreaseHealth(Opp1.attack);
+            shakeManager.Shake(playerRect, 1f, 2);
+
         }
         finishedRound = true;
         StartCoroutine(UpdateStats());
