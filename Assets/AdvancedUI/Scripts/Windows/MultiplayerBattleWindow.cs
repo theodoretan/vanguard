@@ -149,6 +149,7 @@ public class MultiplayerBattleWindow : GenericWindow {
         var message = (Player1.alive ? Player1.name : Opp1.name) + " has won the battle";
 
         // display message
+        actionsGroup.SetActive(true);
 
         // wait for stuff
         yield return new WaitForSeconds(0.5f);
