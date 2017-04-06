@@ -6,6 +6,8 @@ using UnityEngine.UI;
 
 public class MultiplayerBattleWindow : GenericWindow {
 
+    public GameObject actionsGroup;
+
 	public Text OpponentHP;
 	public Text PlayerHP;
 
@@ -23,6 +25,48 @@ public class MultiplayerBattleWindow : GenericWindow {
 
     public override void Open() {
         base.Open();
+    }
+
+    public void CalculateDamage(JSONObject opponent) {
+        // check speed
+        var mySpeed = Player1.speed;
+        var oppSpeed = Int32.Parse(opponent["speed"].str);
+
+        if (mySpeed > oppSpeed) {
+            // we first
+            Opp1.DecreaseHealth(Player1.attack);
+            if (!Opp1.alive) {
+                // they dead and game over
+                StartCoroutine(OnBattleOver());
+            }
+
+            Player1.DecreaseHealth(Opp1.attack);
+
+            if (!Player1.alive) {
+                // we dead, gameover
+                StartCoroutine(OnBattleOver());
+            }
+        } else {
+            // we second
+            Player1.DecreaseHealth(Opp1.attack);
+
+            if (!Player1.alive) {
+                // we dead, gameover
+                StartCoroutine(OnBattleOver());
+            }
+
+            Opp1.DecreaseHealth(Player1.attack);
+            if (!Opp1.alive) {
+                // they dead and game over
+                StartCoroutine(OnBattleOver());
+            }
+        }
+
+        this.OpponentHP.text = Opp1.health + "/" + Opp1.maxHealth;
+        this.PlayerHP.text = Player1.health + "/" + Player1.maxHealth;
+
+        // enable attack/run key
+        actionsGroup.SetActive(true);
     }
 
     public void SetupBattle (JSONObject player, JSONObject opp){
@@ -51,9 +95,12 @@ public class MultiplayerBattleWindow : GenericWindow {
 		// Attack
 		Debug.Log("Attack Pressed");
 
+        // disable attack/run key
+        actionsGroup.SetActive(false);
+
         var socket = ConnectSocket.Instance;
 
-        socket.monsterInformation(Player1);
+        socket.MonsterInformation(Player1);
 
 	}
 
@@ -76,4 +123,18 @@ public class MultiplayerBattleWindow : GenericWindow {
 		manager.Open ((int) Windows.MenuWindow - 1);
 	}
 
+    IEnumerator OnBattleOver() {
+        var message = (Player1.alive ? Player1.name : Opp1.name) + " has won the battle";
+
+        // display message
+
+        // wait for stuff
+        yield return new WaitForSeconds(0.5f);
+
+        // update server
+        var socket = ConnectSocket.Instance;
+
+        socket.UpdateScore(Player1.alive);
+
+    }
 }

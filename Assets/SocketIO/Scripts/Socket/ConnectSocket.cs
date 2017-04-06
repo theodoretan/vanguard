@@ -45,6 +45,10 @@ public class ConnectSocket {
         socket.On("results", AttackResult);
         socket.On("waiting", WaitingForOpponent);
 
+        // TODO: change to show game over screen with updated score
+        // could just be the score screen tbh
+        socket.On("scoreUpdated", ShowMenu);
+
 		socket.On ("error", Error);
 		socket.On ("errorUsernameTaken", UsernameTaken);
 	}
@@ -151,11 +155,22 @@ public class ConnectSocket {
 		socket.Emit("disconnect");
 	}
 
-    public void monsterInformation(Actor a1) {
+    public void MonsterInformation(Actor a1) {
 
         Debug.Log(a1.ToJSON());
 
         socket.Emit("onCommand", a1.ToJSON());
+    }
+
+
+    public void UpdateScore(bool won) {
+        JSONObject data = new JSONObject();
+
+        data.AddField("id", user["id"].str);
+        data.AddField("wins", (won ? 1 : 0));
+        data.AddField("losses", (won ? 0 : 1));
+
+        socket.Emit("updateScore", data);
     }
 
 
@@ -254,9 +269,9 @@ public class ConnectSocket {
 	}
 
     private void AttackResult(SocketIOEvent e) {
-
-        Debug.Log("Battle Results: "+e.data);
-
+        Debug.Log("Battle Results: " + e.data);
+        MultiplayerBattleWindow multiplayerbattlewindow = windowManager.Open((int)Windows.MultiplayerBattleWindow - 1, false) as MultiplayerBattleWindow;
+        multiplayerbattlewindow.CalculateDamage(e.data);
     }
 
     private void WaitingForOpponent(SocketIOEvent e) {
