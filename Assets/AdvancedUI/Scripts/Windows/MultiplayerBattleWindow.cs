@@ -27,21 +27,21 @@ public class MultiplayerBattleWindow : GenericWindow {
         base.Open();
     }
 
-    public void CalculateDamage(JSONObject opponent) {
-        // check speed
-        var mySpeed = Player1.speed;
-        var oppSpeed = Int32.Parse(opponent["speed"].str);
+    public void CalculateDamage(JSONObject data) {
 
-        if (mySpeed > oppSpeed) {
+        if (data["first"].str == "you") {
             // we first
             Opp1.DecreaseHealth(Player1.attack);
+            StartCoroutine(UpdateStats());
+            this.OpponentHP.text = Opp1.health + "/" + Opp1.maxHealth;
             if (!Opp1.alive) {
                 // they dead and game over
                 StartCoroutine(OnBattleOver());
             }
 
             Player1.DecreaseHealth(Opp1.attack);
-
+            StartCoroutine(UpdateStats());
+            this.PlayerHP.text = Player1.health + "/" + Player1.maxHealth;
             if (!Player1.alive) {
                 // we dead, gameover
                 StartCoroutine(OnBattleOver());
@@ -49,22 +49,21 @@ public class MultiplayerBattleWindow : GenericWindow {
         } else {
             // we second
             Player1.DecreaseHealth(Opp1.attack);
-
+            StartCoroutine(UpdateStats());
+            this.PlayerHP.text = Player1.health + "/" + Player1.maxHealth;
             if (!Player1.alive) {
                 // we dead, gameover
                 StartCoroutine(OnBattleOver());
             }
 
             Opp1.DecreaseHealth(Player1.attack);
+            StartCoroutine(UpdateStats());
+            this.OpponentHP.text = Opp1.health + "/" + Opp1.maxHealth;
             if (!Opp1.alive) {
                 // they dead and game over
                 StartCoroutine(OnBattleOver());
             }
         }
-
-        this.OpponentHP.text = Opp1.health + "/" + Opp1.maxHealth;
-        this.PlayerHP.text = Player1.health + "/" + Player1.maxHealth;
-
         // enable attack/run key
         actionsGroup.SetActive(true);
     }
@@ -122,6 +121,10 @@ public class MultiplayerBattleWindow : GenericWindow {
 		socket.Disconnect ();
 		manager.Open ((int) Windows.MenuWindow - 1);
 	}
+
+    IEnumerator UpdateStats() {
+        yield return new WaitForSeconds(0.5f);
+    }
 
     IEnumerator OnBattleOver() {
         var message = (Player1.alive ? Player1.name : Opp1.name) + " has won the battle";
